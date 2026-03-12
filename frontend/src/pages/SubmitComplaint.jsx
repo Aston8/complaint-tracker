@@ -1,34 +1,84 @@
-import Navbar from "../components/Navbar.jsx"
-import Sidebar from "../components/Sidebar.jsx"
+import { useState, useContext } from "react"
+import { AuthContext } from "../context/AuthContext"
 
-function SubmitComplaint() {
+function SubmitComplaint({ refresh }) {
+
+  const { token } = useContext(AuthContext)
+
+  const [text, setText] = useState("")
+  const [loading, setLoading] = useState(false)
+
+  const handleSubmit = async (e) => {
+
+    e.preventDefault()
+
+    setLoading(true)
+
+    try {
+
+      const res = await fetch("http://localhost:3000/api/complaints/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          complaint_text: text
+        })
+      })
+
+      const data = await res.json()
+
+      if (!res.ok) {
+        alert(data.message)
+        setLoading(false)
+        return
+      }
+
+      setText("")
+      refresh()
+
+    } catch (error) {
+
+      alert("Error submitting complaint")
+
+    }
+
+    setLoading(false)
+
+  }
 
   return (
-    <div className="flex">
 
-      <Sidebar />
+    <form
+      onSubmit={handleSubmit}
+      className="bg-white p-4 rounded shadow"
+    >
 
-      <div className="flex-1">
+      <h2 className="text-lg font-semibold mb-3">
+        Submit Complaint
+      </h2>
 
-        <Navbar />
+      <textarea
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        placeholder="Describe your issue..."
+        className="border w-full p-2 rounded mb-3"
+      />
 
-        <div className="p-6">
+      <button
+        className="bg-blue-600 text-white px-4 py-2 rounded"
+        disabled={loading}
+      >
 
-          <h1 className="text-xl font-bold mb-4">
-            Submit Complaint
-          </h1>
+        {loading ? "Submitting..." : "Submit Complaint"}
 
-          <textarea
-            placeholder="Describe your complaint"
-            className="border p-2 w-full h-32"
-          />
+      </button>
 
-        </div>
+    </form>
 
-      </div>
-
-    </div>
   )
+
 }
 
 export default SubmitComplaint

@@ -1,18 +1,33 @@
-function ComplaintCard({ title, status }) {
+function ComplaintCard({ complaint }) {
 
   return (
-    <div className="bg-white p-4 shadow rounded">
 
-      <h3 className="font-bold">
-        {title}
-      </h3>
+    <div className="border p-4 rounded shadow">
 
-      <p className="text-sm text-gray-500">
-        Status: {status}
+      <p className="font-semibold">
+        {complaint.complaint_text}
+      </p>
+
+      <p className="text-sm mt-2">
+        Category: {complaint.category}
+      </p>
+
+      <p className="text-sm">
+        Department: {complaint.department}
+      </p>
+
+      <p className="text-sm">
+        Priority: {complaint.priority}
+      </p>
+
+      <p className="text-sm">
+        Status: {complaint.status}
       </p>
 
     </div>
+
   )
+
 }
 
 export default ComplaintCard

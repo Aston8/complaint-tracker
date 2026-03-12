@@ -3,14 +3,17 @@ import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
 
 export const signup = async (req, res) => {
+
   try {
 
-    const { name, email, password } = req.body
+    const { name, email, password, role, department } = req.body
 
     const existingUser = await User.findOne({ email })
 
     if (existingUser) {
-      return res.status(400).json({ message: "User already exists" })
+      return res.status(400).json({
+        message: "User already exists"
+      })
     }
 
     const hashedPassword = await bcrypt.hash(password, 10)
@@ -18,18 +21,32 @@ export const signup = async (req, res) => {
     const user = await User.create({
       name,
       email,
-      password: hashedPassword
+      password: hashedPassword,
+      role,
+      department: role === "admin" ? department : null
     })
 
-    res.json({ message: "Signup successful", user })
+    res.status(201).json({
+      message: "Signup successful",
+      user
+    })
 
-  } catch (err) {
-    res.status(500).json(err)
+  } catch (error) {
+
+    console.log(error)
+
+    res.status(500).json({
+      message: "Server error"
+    })
+
   }
+
 }
 
 
+
 export const login = async (req, res) => {
+
   try {
 
     const { email, password } = req.body
@@ -37,13 +54,17 @@ export const login = async (req, res) => {
     const user = await User.findOne({ email })
 
     if (!user) {
-      return res.status(400).json({ message: "User not found" })
+      return res.status(400).json({
+        message: "User not found"
+      })
     }
 
     const match = await bcrypt.compare(password, user.password)
 
     if (!match) {
-      return res.status(400).json({ message: "Invalid password" })
+      return res.status(400).json({
+        message: "Invalid password"
+      })
     }
 
     const token = jwt.sign(
@@ -52,14 +73,30 @@ export const login = async (req, res) => {
       { expiresIn: "1d" }
     )
 
-    res.json({ token, user })
+    res.json({
+      message: "Login successful",
+      token,
+      user
+    })
 
-  } catch (err) {
-    res.status(500).json(err)
+  } catch (error) {
+
+    console.log(error)
+
+    res.status(500).json({
+      message: "Server error"
+    })
+
   }
+
 }
 
 
+
 export const logout = async (req, res) => {
-  res.json({ message: "Logout successful" })
+
+  res.json({
+    message: "Logout successful"
+  })
+
 }

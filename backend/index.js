@@ -3,25 +3,32 @@ import cors from "cors"
 import dotenv from "dotenv"
 import connectDB from "./config/db.js"
 import authRoutes from "./routes/authRoutes.js"
+import complaintRoutes from "./routes/complaintRoutes.js"
 
 dotenv.config()
 
 const app = express()
 
-app.use(cors())
+// CORS FIX
+app.use(cors({
+  origin: "http://localhost:5173",
+  methods: ["GET","POST","PUT","DELETE"],
+  allowedHeaders: ["Content-Type","Authorization"]
+}))
+
 app.use(express.json())
 
 connectDB()
 
-// ADD THIS LINE
 app.use("/api/auth", authRoutes)
+app.use("/api/complaints", complaintRoutes)
 
-app.get("/", (req, res) => {
+app.get("/", (req,res)=>{
   res.send("Server running")
 })
 
-const PORT = process.env.PORT || 5000
+const PORT = process.env.PORT || 3000
 
-app.listen(PORT, () => {
+app.listen(PORT, ()=>{
   console.log(`Server running on port ${PORT}`)
 })

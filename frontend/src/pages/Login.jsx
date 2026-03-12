@@ -4,56 +4,57 @@ import { AuthContext } from "../context/AuthContext"
 
 function Login() {
 
+  const { login } = useContext(AuthContext)
   const navigate = useNavigate()
 
-  const { login } = useContext(AuthContext)
+  const [form, setForm] = useState({
+    email: "",
+    password: ""
+  })
 
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
+  const handleChange = (e) => {
 
-  const handleLogin = async (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value
+    })
+
+  }
+
+  const handleSubmit = async (e) => {
 
     e.preventDefault()
 
     try {
 
-      const res = await fetch(
-        "http://localhost:5000/api/auth/login",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            email,
-            password
-          })
-        }
-      )
+      const res = await fetch("http://localhost:3000/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(form)
+      })
 
       const data = await res.json()
 
-      login(data.user, data.token)
+      if (!res.ok) {
+        alert(data.message)
+        return
+      }
+
+      login(data)
 
       if (data.user.role === "admin") {
-
         navigate("/admin")
-
-      }
-      else if (data.user.role === "superadmin") {
-
+      } else if (data.user.role === "superadmin") {
         navigate("/analytics")
-
-      }
-      else {
-
+      } else {
         navigate("/student")
-
       }
 
     } catch (error) {
 
-      console.log(error)
+      alert("Login error")
 
     }
 
@@ -64,8 +65,8 @@ function Login() {
     <div className="flex justify-center items-center h-screen bg-gray-100">
 
       <form
-        onSubmit={handleLogin}
-        className="bg-white p-8 rounded shadow-lg w-96"
+        onSubmit={handleSubmit}
+        className="bg-white p-8 rounded shadow-md w-96"
       >
 
         <h2 className="text-2xl font-bold mb-6 text-center">
@@ -73,32 +74,30 @@ function Login() {
         </h2>
 
         <input
-          type="email"
+          name="email"
           placeholder="Email"
           className="border p-2 w-full mb-4 rounded"
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={handleChange}
         />
 
         <input
           type="password"
+          name="password"
           placeholder="Password"
           className="border p-2 w-full mb-4 rounded"
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={handleChange}
         />
 
         <button
-          className="bg-blue-600 text-white w-full py-2 rounded hover:bg-blue-700"
+          className="bg-blue-600 text-white w-full py-2 rounded"
         >
           Login
         </button>
 
-        <p className="text-center mt-4 text-sm">
-          Don't have an account?
-          <Link
-            to="/signup"
-            className="text-blue-600 ml-1"
-          >
-            Sign up
+        <p className="text-center mt-4">
+          Don't have account?
+          <Link to="/signup" className="text-blue-600 ml-2">
+            Signup
           </Link>
         </p>
 

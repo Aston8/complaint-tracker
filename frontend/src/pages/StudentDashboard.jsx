@@ -1,33 +1,68 @@
-import Navbar from "../components/Navbar.jsx"
-import Sidebar from "../components/Sidebar.jsx"
+import { useEffect, useState, useContext } from "react"
+import { AuthContext } from "../context/AuthContext"
+import ComplaintCard from "../components/ComplaintCard"
+import SubmitComplaint from "./SubmitComplaint"
 
 function StudentDashboard() {
 
+  const { token } = useContext(AuthContext)
+
+  const [complaints, setComplaints] = useState([])
+
+  const fetchComplaints = async () => {
+
+    try {
+
+      const res = await fetch("http://localhost:3000/api/complaints", {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+
+      const data = await res.json()
+
+      setComplaints(data)
+
+    } catch (error) {
+
+      console.log(error)
+
+    }
+
+  }
+
+  useEffect(() => {
+
+    fetchComplaints()
+
+  }, [])
+
   return (
-    <div className="flex">
 
-      <Sidebar />
+    <div className="p-6">
 
-      <div className="flex-1">
+      <h1 className="text-3xl font-bold mb-6">
+        Student Dashboard
+      </h1>
 
-        <Navbar />
+      <SubmitComplaint refresh={fetchComplaints} />
 
-        <div className="p-6">
+      <h2 className="text-xl font-semibold mt-8 mb-4">
+        My Complaints
+      </h2>
 
-          <h1 className="text-2xl font-bold mb-4">
-            Student Dashboard
-          </h1>
+      <div className="grid gap-4">
 
-          <p>
-            Welcome to the complaint tracker system.
-          </p>
-
-        </div>
+        {complaints.map((c) => (
+          <ComplaintCard key={c._id} complaint={c} />
+        ))}
 
       </div>
 
     </div>
+
   )
+
 }
 
 export default StudentDashboard
