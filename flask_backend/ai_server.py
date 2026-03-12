@@ -11,7 +11,7 @@ priority_model  = joblib.load("priority_model.pkl")
 sentiment_model = joblib.load("sentiment_model.pkl")
 
 department_map = {
-    "Hostel":         "Hostel Warden",
+    "Hostel":         "Hostel Warden",                  
     "Academic":       "Academic Office",
     "Infrastructure": "Maintenance Department",
     "Canteen":        "Canteen Manager",
@@ -19,7 +19,7 @@ department_map = {
 }
 
 @app.route("/analyze", methods=["POST"])
-def analyze():
+def analyze():  
     data    = request.json
     text    = data.get("complaint_text", "").lower().strip()
 

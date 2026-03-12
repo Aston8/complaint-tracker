@@ -4,21 +4,38 @@ export const AuthContext = createContext()
 
 export const AuthProvider = ({ children }) => {
 
-  const [user, setUser] = useState(
-    JSON.parse(localStorage.getItem("user")) || null
-  )
+  // SAFE USER LOAD
+  const getStoredUser = () => {
+    try {
 
-  const [token, setToken] = useState(
-    localStorage.getItem("token") || null
-  )
+      const storedUser = localStorage.getItem("user")
 
-  const login = (data) => {
+      if (!storedUser || storedUser === "undefined") {
+        return null
+      }
 
-    setUser(data.user)
-    setToken(data.token)
+      return JSON.parse(storedUser)
 
-    localStorage.setItem("user", JSON.stringify(data.user))
-    localStorage.setItem("token", data.token)
+    } catch (error) {
+      return null
+    }
+  }
+
+  const getStoredToken = () => {
+    const token = localStorage.getItem("token")
+    return token ? token : null
+  }
+
+  const [user, setUser] = useState(getStoredUser())
+  const [token, setToken] = useState(getStoredToken())
+
+  const login = (userData, tokenData) => {
+
+    setUser(userData)
+    setToken(tokenData)
+
+    localStorage.setItem("user", JSON.stringify(userData))
+    localStorage.setItem("token", tokenData)
 
   }
 
@@ -35,9 +52,7 @@ export const AuthProvider = ({ children }) => {
   return (
 
     <AuthContext.Provider value={{ user, token, login, logout }}>
-
       {children}
-
     </AuthContext.Provider>
 
   )

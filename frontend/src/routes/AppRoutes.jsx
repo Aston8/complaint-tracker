@@ -4,14 +4,12 @@ import Login from "../pages/Login"
 import Signup from "../pages/Signup"
 import StudentDashboard from "../pages/StudentDashboard"
 import AdminDashboard from "../pages/AdminDashboard"
-import Analytics from "../pages/Analytics"
 
 import ProtectedRoute from "../components/ProtectedRoute"
 
 function AppRoutes() {
 
   return (
-
     <BrowserRouter>
 
       <Routes>
@@ -37,21 +35,10 @@ function AppRoutes() {
           }
         />
 
-        <Route
-          path="/analytics"
-          element={
-            <ProtectedRoute>
-              <Analytics />
-            </ProtectedRoute>
-          }
-        />
-
       </Routes>
 
     </BrowserRouter>
-
   )
-
 }
 
 export default AppRoutes

@@ -69,91 +69,133 @@ function Signup() {
 
   return (
 
-    <div className="flex justify-center items-center h-screen bg-gray-100">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-indigo-50">
 
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white p-8 rounded shadow-lg w-96"
-      >
+      <div className="max-w-md w-full mx-4">
 
-        <h2 className="text-2xl font-bold mb-6 text-center">
-          Create Account
-        </h2>
+        <div className="bg-white rounded-2xl shadow-2xl p-8 border border-gray-100">
 
-        <input
-          name="name"
-          placeholder="Full Name"
-          className="border p-2 w-full mb-4 rounded"
-          onChange={handleChange}
-        />
+          <div className="text-center mb-8">
+            <div className="w-16 h-16 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+              </svg>
+            </div>
+            <h2 className="text-3xl font-bold text-gray-800">
+              Create Account
+            </h2>
+            <p className="text-gray-600 mt-2">Join the complaint tracker system</p>
+          </div>
 
-        <input
-          name="email"
-          placeholder="Email"
-          className="border p-2 w-full mb-4 rounded"
-          onChange={handleChange}
-        />
+          <form onSubmit={handleSubmit} className="space-y-6">
 
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          className="border p-2 w-full mb-4 rounded"
-          onChange={handleChange}
-        />
+            <div>
+              <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+                Full Name
+              </label>
+              <input
+                id="name"
+                name="name"
+                type="text"
+                placeholder="Enter your full name"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors duration-200"
+                onChange={handleChange}
+                required
+              />
+            </div>
 
-        {/* ROLE SELECT */}
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                Email Address
+              </label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                placeholder="Enter your email"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors duration-200"
+                onChange={handleChange}
+                required
+              />
+            </div>
 
-        <select
-          name="role"
-          className="border p-2 w-full mb-4 rounded"
-          onChange={handleChange}
-        >
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+                Password
+              </label>
+              <input
+                id="password"
+                type="password"
+                name="password"
+                placeholder="Choose a strong password"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors duration-200"
+                onChange={handleChange}
+                required
+              />
+            </div>
 
-          <option value="student">Student</option>
-          <option value="admin">Admin</option>
-          <option value="superadmin">Super Admin</option>
+            <div>
+              <label htmlFor="role" className="block text-sm font-medium text-gray-700 mb-2">
+                Account Type
+              </label>
+              <select
+                id="role"
+                name="role"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors duration-200"
+                onChange={handleChange}
+                value={form.role}
+              >
+                <option value="student">Student</option>
+                <option value="admin">Admin</option>
+                <option value="superadmin">Super Admin</option>
+              </select>
+            </div>
 
-        </select>
+            {form.role === "admin" && (
+              <div>
+                <label htmlFor="department" className="block text-sm font-medium text-gray-700 mb-2">
+                  Department
+                </label>
+                <select
+                  id="department"
+                  name="department"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors duration-200"
+                  onChange={handleChange}
+                  value={form.department}
+                  required
+                >
+                  <option value="">Select Department</option>
+                  <option value="Infrastructure">Infrastructure</option>
+                  <option value="IT">IT</option>
+                  <option value="Hostel">Hostel</option>
+                  <option value="Academic">Academic</option>
+                  <option value="Canteen">Canteen</option>
+                  <option value="Security">Security</option>
+                </select>
+              </div>
+            )}
 
-        {/* DEPARTMENT SELECT ONLY FOR ADMIN */}
+            <button
+              type="submit"
+              className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-medium py-3 rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 transform hover:-translate-y-0.5 shadow-lg hover:shadow-xl"
+            >
+              Create Account
+            </button>
 
-        {form.role === "admin" && (
+          </form>
 
-          <select
-            name="department"
-            className="border p-2 w-full mb-4 rounded"
-            onChange={handleChange}
-          >
+          <div className="mt-6 text-center">
+            <p className="text-gray-600">
+              Already have an account?
+              <Link to="/" className="text-indigo-600 hover:text-indigo-700 font-medium ml-2 hover:underline transition-colors">
+                Sign In
+              </Link>
+            </p>
+          </div>
 
-            <option value="">Select Department</option>
+        </div>
 
-            <option value="Infrastructure">Infrastructure</option>
-            <option value="IT">IT</option>
-            <option value="Hostel">Hostel</option>
-            <option value="Academic">Academic</option>
-            <option value="Canteen">Canteen</option>
-            <option value="Security">Security</option>
-
-          </select>
-
-        )}
-
-        <button
-          type="submit"
-          className="bg-blue-600 text-white w-full py-2 rounded hover:bg-blue-700"
-        >
-          Sign Up
-        </button>
-
-        <p className="text-center mt-4 text-sm">
-          Already have an account?
-          <Link to="/" className="text-blue-600 ml-2">
-            Login
-          </Link>
-        </p>
-
-      </form>
+      </div>
 
     </div>
 
