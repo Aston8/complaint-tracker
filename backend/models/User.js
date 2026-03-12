@@ -27,18 +27,16 @@ const userSchema = new mongoose.Schema({
   department: {
     type: String,
     enum: [
-      "Infrastructure",
-      "IT",
-      "Hostel",
-      "Academic",
-      "Canteen",
-      "Security"
+      "maintenance",
+      "hostel",
+      "academic",
+      "canteen",
+      "student welfare",
+      "administration"
     ],
-    default: null
+    default: "administration"
   }
 
 }, { timestamps: true })
 
-const User = mongoose.model("User", userSchema)
-
-export default User
+export default mongoose.model("User", userSchema)

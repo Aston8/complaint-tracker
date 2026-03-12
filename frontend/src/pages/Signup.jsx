@@ -164,13 +164,13 @@ function Signup() {
                   value={form.department}
                   required
                 >
-                  <option value="">Select Department</option>
-                  <option value="Infrastructure">Infrastructure</option>
-                  <option value="IT">IT</option>
-                  <option value="Hostel">Hostel</option>
-                  <option value="Academic">Academic</option>
-                  <option value="Canteen">Canteen</option>
-                  <option value="Security">Security</option>
+                 <option value="">Select Department</option>
+<option value="maintenance">Maintenance Department</option>
+<option value="hostel">Hostel Warden</option>
+<option value="academic">Academic Office</option>
+<option value="canteen">Canteen Manager</option>
+<option value="student welfare">Student Welfare Cell</option>
+<option value="administration">Administration</option>
                 </select>
               </div>
             )}

@@ -2,11 +2,15 @@ import { useContext } from "react"
 import { Navigate } from "react-router-dom"
 import { AuthContext } from "../context/AuthContext"
 
-function ProtectedRoute({ children }) {
+function ProtectedRoute({ children, role }) {
 
-  const { token } = useContext(AuthContext)
+  const { user, token } = useContext(AuthContext)
 
   if (!token) {
+    return <Navigate to="/" />
+  }
+
+  if (role && user?.role !== role) {
     return <Navigate to="/" />
   }
 

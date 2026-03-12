@@ -4,8 +4,8 @@ export const AuthContext = createContext()
 
 export const AuthProvider = ({ children }) => {
 
-  // SAFE USER LOAD
   const getStoredUser = () => {
+
     try {
 
       const storedUser = localStorage.getItem("user")
@@ -16,14 +16,17 @@ export const AuthProvider = ({ children }) => {
 
       return JSON.parse(storedUser)
 
-    } catch (error) {
+    } catch {
       return null
     }
+
   }
 
   const getStoredToken = () => {
+
     const token = localStorage.getItem("token")
     return token ? token : null
+
   }
 
   const [user, setUser] = useState(getStoredUser())

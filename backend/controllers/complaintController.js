@@ -1,4 +1,5 @@
 import Complaint from "../models/Complaint.js"
+import User from "../models/User.js"
 
 
 // CREATE COMPLAINT
@@ -22,7 +23,7 @@ export const createComplaint = async (req, res) => {
       user: req.user.id,
       complaint_text,
       category: aiData.category,
-      department: aiData.department,
+      department: aiData.department.toLowerCase().trim(),
       priority: aiData.priority,
       sentiment: aiData.sentiment,
       status: "Pending"
@@ -43,7 +44,8 @@ export const createComplaint = async (req, res) => {
 }
 
 
-// GET STUDENT'S OWN COMPLAINTS
+
+// GET STUDENT COMPLAINTS
 export const getMyComplaints = async (req, res) => {
 
   try {
@@ -67,13 +69,21 @@ export const getMyComplaints = async (req, res) => {
 }
 
 
+
 // GET ADMIN DEPARTMENT COMPLAINTS
 export const getDepartmentComplaints = async (req, res) => {
 
   try {
 
-    const complaints = await Complaint
-      .find({ department: req.user.department })
+    // get admin from DB
+    const user = await User.findById(req.user.id)
+
+    const adminDept = user.department.toLowerCase().trim()
+
+    const complaints = await Complaint.find({
+      department: { $regex: adminDept, $options: "i" }
+    })
+      .populate("user", "name email")
       .sort({ createdAt: -1 })
 
     res.json(complaints)
@@ -91,12 +101,19 @@ export const getDepartmentComplaints = async (req, res) => {
 }
 
 
+
+// UPDATE COMPLAINT STATUS
+
+
 // UPDATE COMPLAINT STATUS
 export const updateComplaintStatus = async (req, res) => {
 
   try {
 
     const { status } = req.body
+
+    console.log("Updating complaint:", req.params.id)
+    console.log("New status:", status)
 
     const complaint = await Complaint.findByIdAndUpdate(
       req.params.id,
@@ -108,7 +125,7 @@ export const updateComplaintStatus = async (req, res) => {
 
   } catch (error) {
 
-    console.log(error)
+    console.log("Update error:", error)
 
     res.status(500).json({
       message: "Error updating complaint status"
