@@ -8,7 +8,6 @@ import SubmitComplaint from "../pages/SubmitComplaint"
 
 import AdminDashboard from "../pages/AdminDashboard"
 import ComplaintTable from "../components/ComplaintTable"
-import Analytics from "../pages/Analytics"
 
 import ProtectedRoute from "../components/ProtectedRoute"
 
@@ -55,15 +54,6 @@ function AppRoutes() {
         element={
           <ProtectedRoute role="admin">
             <ComplaintTable />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/admin/analytics"
-        element={
-          <ProtectedRoute role="admin">
-            <Analytics />
           </ProtectedRoute>
         }
       />
